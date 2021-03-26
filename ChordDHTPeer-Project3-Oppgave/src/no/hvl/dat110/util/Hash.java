@@ -17,23 +17,19 @@ public class Hash {
 	private static BigInteger hashint; 
 	
 	public static BigInteger hashOf(String entity) {		
-		// Task: Hash a given string using MD5 and return the result as a BigInteger.
-		// we use MD5 with 128 bits digest
-		// compute the hash of the input 'entity'
-		// convert the hash into hex format
-		// convert the hex into BigInteger
-		// return the BigInteger
-		//TASK IS DONE!!!
 		
-		try {
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.update(entity.getBytes());
-			byte[] digest = md.digest();
-			String hexformat = toHex(digest);
-			hashint = new BigInteger(hexformat, 16);
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
+		// Task: Hash a given string using MD5 and return the result as a BigInteger.
+		
+		// we use MD5 with 128 bits digest
+		
+		// compute the hash of the input 'entity'
+		
+		// convert the hash into hex format
+		
+		// convert the hex into BigInteger
+		
+		// return the BigInteger
+		
 		return hashint;
 	}
 	
