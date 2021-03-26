@@ -6,6 +6,8 @@ package no.hvl.dat110.util;
  *
  */
 
+import no.hvl.dat110.middleware.Message;
+
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.UnknownHostException;
@@ -39,18 +41,23 @@ public class Hash {
 	}
 	
 	public static BigInteger addressSize() {
-		
-		// Task: compute the address size of MD5
-		
-		// get the digest length
-		
-		// compute the number of bits = digest length * 8
-		
-		// compute the address size = 2 ^ number of bits
-		
+
+		// Compute the address size of MD5
+
+		int digestLength = 0;
+		try {
+			 digestLength = MessageDigest.getInstance("MD5").getDigestLength(); // gets the digest length
+
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+
+		// compute the address size = 2 ^ number of bi
+		BigInteger StorInteger = new BigInteger("2");
+		int BigBits = digestLength * 8; // compute the number of bits = digest length * 8
+
 		// return the address size
-		
-		return null;
+		return StorInteger.pow(BigBits);
 	}
 	
 	public static int bitSize() {
