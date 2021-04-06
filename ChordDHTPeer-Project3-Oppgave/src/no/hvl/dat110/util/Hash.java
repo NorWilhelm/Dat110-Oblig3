@@ -41,7 +41,6 @@ public class Hash {
 	}
 	
 	public static BigInteger addressSize() {
-
 		// Compute the address size of MD5
 
 		int digestLength = 0;
