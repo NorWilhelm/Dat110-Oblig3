@@ -175,11 +175,17 @@ public class MutualExclusion {
 		// iterate over the activenodes
 		for(Message msg : activenodes) {
 			
+			// obtain a stub for each node from the registry
+			NodeInterface stub = Util.getProcessStub(msg.getNodeIP(), msg.getPort());
+			
+			// call releaseLocks()
+			try {
+				stub.releaseLocks();
+			} catch(RemoteException e) {
+				e.printStackTrace();
+			}
+			
 		}
-		
-		// obtain a stub for each node from the registry
-		
-		// call releaseLocks()
 	
 	}
 	
