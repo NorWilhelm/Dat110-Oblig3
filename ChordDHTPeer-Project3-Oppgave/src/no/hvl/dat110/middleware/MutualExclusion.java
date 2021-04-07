@@ -76,6 +76,7 @@ public class MutualExclusion {
 		// node.broadcastUpdatetoPeers
 		
 		// clear the mutexqueue
+		mutexqueue.clear();
 		
 		// return permission
 		
@@ -128,8 +129,11 @@ public class MutualExclusion {
 			/** case 1: Receiver is not accessing shared resource and does not want to (send OK to sender) */
 			case 0: {
 				// get a stub for the sender from the registry
+				NodeInterface stub = Util.getProcessStub(procName, port);
 				// acknowledge message
+				message.setAcknowledged(true);
 				// send acknowledgement back by calling onMutexAcknowledgementReceived()
+				stub.onMutexAcknowledgementReceived(message);
 				
 				break;
 			}
@@ -138,6 +142,8 @@ public class MutualExclusion {
 			case 1: {
 				
 				// queue this message
+				queue.add(message);
+				
 				break;
 			}
 			
@@ -147,11 +153,31 @@ public class MutualExclusion {
 			 */
 			case 2: {
 				// check the clock of the sending process
+				int messageClock = message.getClock();
 				// own clock for the multicast message
+				int localClock = clock.getClock(); 
 				// compare clocks, the lowest wins
-				// if clocks are the same, compare nodeIDs, the lowest wins
-				// if sender wins, acknowledge the message, obtain a stub and call onMutexAcknowledgementReceived()
+				if(messageClock == localClock) {
+					// if clocks are the same, compare nodeIDs, the lowest wins
+					if(node.getNodeID().compareTo(message.getNodeID()) > 0) {
+						NodeInterface stub = Util.getProcessStub(procName, port);
+						message.setAcknowledged(true);
+						stub.onMutexAcknowledgementReceived(message);
+					} else {
+						queue.add(message);
+					}
+				// if sender wins, acknowledge the message, obtain a stub and call onMutexAcknowledgementReceived()	
+				} else if(localClock > messageClock) {
+					NodeInterface stub = Util.getProcessStub(procName, port);
+					message.setAcknowledged(true);
+					stub.onMutexAcknowledgementReceived(message);
 				// if sender looses, queue it
+				} else {
+					queue.add(message);
+				}
+				
+				
+				
 				
 				
 
