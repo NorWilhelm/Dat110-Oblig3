@@ -66,22 +66,27 @@ public class MutualExclusion {
 		// start MutualExclusion algorithm
 		
 		// first, removeDuplicatePeersBeforeVoting. A peer can contain 2 replicas of a file. This peer will appear twice
+		List<Message> mutex = removeDuplicatePeersBeforeVoting();
 
 		// multicast the message to activenodes (hint: use multicastMessage)
+		multicastMessage(message, mutex);
 		
 		// check that all replicas have replied (permission)
+		boolean permission = areAllMessagesReturned(mutex.size());
 		
 		// if yes, acquireLock
-		
-		// node.broadcastUpdatetoPeers
-		
-		// clear the mutexqueue
-		mutexqueue.clear();
+		if(permission) {
+			acquireLock();
+			
+			// node.broadcastUpdatetoPeers
+			node.broadcastUpdatetoPeers(updates);
+			
+			// clear the mutexqueue
+			mutexqueue.clear();
+		}
 		
 		// return permission
-		
-		
-		return false;
+		return permission;
 	}
 	
 	// multicast message to other processes including self
